@@ -170,7 +170,7 @@ describe Cuboid do
       expect(cube.len).to eq(10)
     end
 
-    it "rotates about x axis if there is room within arbritrary boundary" do
+    it "rotates about x axis if there is room within specified boundary" do
       bounds = { x: 4, y: 5, z: 10 }
       cube = Cuboid.new(10,10,14,6,6,8)
       expect(cube.width).to eq(6)
@@ -191,18 +191,9 @@ describe Cuboid do
       expect(cube.len).to eq(old_length)
     end
 
-    it "returns center minimum distance from boundary required for rotation" do
+    it "returns center coords minimum distance from boundary required for rotation" do
       cube = Cuboid.new(3,3,4,6,6,8)
-      new_center = cube.rotatex
-      old_width = 6
-      old_length = 8
       expect(cube.rotatex).to eq([3,5,5])
-      expect(cube.len).to eq(old_length)
-      expect(cube.width).to eq(old_width)
-      expect(cube.move_to(3,5,5)).to be(true)
-      expect(cube.rotatex).to be(true)
-      expect(cube.width).to eq(old_length)
-      expect(cube.len).to eq(old_width)
     end
   end
 end
