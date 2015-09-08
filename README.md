@@ -1,5 +1,6 @@
 # My implementation of the following code challenge
-## One thing I want to note is that since the instructions explicitly asked for a method to return the vertices of the cuboid, I included it in my code and tests. I don't actually use them for any other reason than that. Instead of using the vertices, I calculate the minimum x, y, and z values for a cuboid based on its dimensions. This should give me all the information I need in order to check for intersections, perform translations and rotations, and calculate vertices.
+
+Thanks for the fun project, ToM!
 
 
 # Rails Coding Challenge
