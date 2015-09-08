@@ -70,38 +70,8 @@ describe Cuboid do
     end
   end
 
-  describe "#will_fit?" do
-    it "returns true if cuboid is inside origin ([0,0,0] by default)" do
-      cube = Cuboid.new(3,4,5,3,3,4)
-      expect(cube.will_fit?).to be(true)
-    end
-
-    it "returns true if cuboid inside arbritrary specified origin" do
-      cube = Cuboid.new(0,0,0,4,4,4)
-      expect(cube.will_fit?({ x: -2, y: -2, z: -2 })).to be(true)
-    end
-
-    it "return false if cuboid is overlapping origin on x axis" do
-      cube = Cuboid.new(1,4,5,3,3,4)
-      expect(cube.mins[:x]).to be < 0
-      expect(cube.will_fit?).to be(false)
-    end
-
-    it "return false if cuboid is overlapping origin on y axis" do
-      cube = Cuboid.new(3,4,5,3,12,4)
-      expect(cube.mins[:y]).to be < 0
-      expect(cube.will_fit?).to be(false)
-    end
-
-    it "return false if cuboid is overlapping origin on z axis" do
-      cube = Cuboid.new(1,4,5,3,3,20)
-      expect(cube.mins[:z]).to be < 0
-      expect(cube.will_fit?).to be(false)
-    end
-  end
-
   describe "#move_to!" do
-    it "always changes the origin" do
+    it "always changes to the provided origin" do
       new_center = [-100,-100,-100]
       cube = Cuboid.new(0,0,0,4,5,6)
       cube.move_to!(*new_center)
@@ -116,13 +86,13 @@ describe Cuboid do
       expect(subject.move_to(50,50,50)).to be(true)
     end
 
-    it "changes the center to specified value" do
+    it "moves center to specified coordinates" do
       subject.move_to(50,50,50)
       expect(subject.center.values).to eq([50,50,50])
     end
 
-    it "returns false if destination will cause overlap with boundary" do
-      expect(subject.move_to(-15,-15,-15)).to be(false)
+    it "returns false when overlap would occur with default boundary" do
+      expect(subject.move_to(0,0,0)).to be(false)
     end
 
     it "does not move cuboid if overlap will occur" do
@@ -130,12 +100,12 @@ describe Cuboid do
       expect(subject.center.values).to eq([5,5,5])
     end
 
-    it "detects overlap with arbritray specified boundary" do
+    it "returns false when overlap would occur with specified boundary" do
       bounds = { x: 3, y: 1, z: 0 }
       expect(subject.move_to(3,1,0, bounds)).to be(false)
     end
 
-    it "allows move to center inside arbritrary specified boundary" do
+    it "moves center to specified coordinates with specified boundary" do
       bounds = { x: 1, y: 5, z: 10 }
       expect(subject.move_to(6, 10, 15)).to be(true)
       expect(subject.center.values).to eq([6,10,15])

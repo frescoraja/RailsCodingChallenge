@@ -27,8 +27,8 @@ class Cuboid
 
   def move_to(x, y, z, bounds = @@DFLT_BNDS)
     container = bounds
-    test_cube = Cuboid.new(x, y, z, @height, @width, @len)
-    if test_cube.will_fit?(container)
+    test_center = { x: x, y: y, z: z }
+    if will_fit?(test_center, container)
       move_to!(x, y, z)
       true
     else
@@ -39,7 +39,8 @@ class Cuboid
   def move_to!(x, y, z)
     @x, @y, @z = x, y, z
     set_bounds
-    self.center
+
+    self
   end
 
   def rotatex(bounds = @@DFLT_BNDS)
@@ -83,15 +84,18 @@ class Cuboid
     vertices
   end
 
-  def will_fit?(bounds = @@DFLT_BNDS)
-    container = bounds
-    center.keys.none? { |axis| @mins[axis] < container[axis]}
-  end
-
   private
   def set_bounds
     @maxes[:x], @mins[:x] = [@x + (@height / 2), @x - (@height / 2)]
     @maxes[:y], @mins[:y] = [@y + (@width / 2), @y - (@width / 2)]
     @maxes[:z], @mins[:z] = [@z + (@len / 2), @z - (@len / 2)]
+  end
+
+  def will_fit?(new_center, bounds = @@DFLT_BNDS)
+    container = bounds
+    new_center.none? do |axis, val|
+      diff = center[axis] - new_center[axis]
+      @mins[axis] - diff < container[axis]
+    end
   end
 end
