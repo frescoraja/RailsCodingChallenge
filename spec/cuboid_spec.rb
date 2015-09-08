@@ -1,8 +1,5 @@
 require 'cuboid'
 
-#This test is incomplete and, in fact, won't even run without errors.
-#  Do whatever you need to do to make it work and please add your own test cases for as many
-#  methods as you feel need coverage
 describe Cuboid do
   describe "#initialize" do
     it "creates a cube with given center" do
@@ -10,14 +7,14 @@ describe Cuboid do
       expect(cube.center).to eq({x: 4, y: 4, z: 4})
     end
 
-    it "sets height, width, and length attributes" do
+    it "sets height, width, and length attributes when dimensions provided" do
       cube = Cuboid.new(3,10,12,6,12,8)
       expect(cube.height).to eq(6)
       expect(cube.width).to eq(12)
       expect(cube.len).to eq(8)
     end
 
-    it "computes max and min values or boundaries of cuboid" do
+    it "computes max and min values of cuboid's faces" do
       cube = Cuboid.new(3,3,3,6,6,6)
       expect(cube.maxes).to eq({ x: 6, y: 6, z: 6 })
       expect(cube.mins).to eq({ x: 0, y: 0, z: 0 })
@@ -25,8 +22,8 @@ describe Cuboid do
   end
 
   describe "#vertices" do
-    it "returns vertices (when no size provided l, w, h = 2)" do
-      cube = Cuboid.new(1,1,1)
+    it "returns vertices" do
+      cube = Cuboid.new(1,1,1,2,2,2)
       expect(cube.vertices.sort).to eq([
         [0,0,0],
         [0,2,0],
@@ -39,7 +36,7 @@ describe Cuboid do
       ].sort)
     end
 
-    it "computes vertices (when size provided)" do
+    it "computes vertices (when dimensions provided)" do
       cube = Cuboid.new(3,3,3,6,4,5)
       expect(cube.vertices.sort).to eq([
         [0,5,5.5],
@@ -50,6 +47,25 @@ describe Cuboid do
         [6,5,0.5],
         [6,1,5.5],
         [6,1,0.5]
+      ].sort)
+    end
+
+    it "computes correct vertices after rotation, translation" do
+      #12x24x12 cuboid centered at 50,50,50, rotated 90 degrees about
+      #x axis, will now have dimensions 12x12x24 and vertices:
+      #[50 +- 6, 50+-6, 50+- 12]
+      cube = Cuboid.new(6,12,12,12,24,12)
+      cube.rotatex!
+      cube.move_to!(50,50,50)
+      expect(cube.vertices.sort).to eq([
+        [56,56,62],
+        [56,56,38],
+        [56,44,62],
+        [56,44,38],
+        [44,56,62],
+        [44,56,38],
+        [44,44,62],
+        [44,44,38]
       ].sort)
     end
   end
